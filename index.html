@@ -15,7 +15,7 @@
             height: 100vh;
             background: linear-gradient(135deg, #f6d1fc, #c2d5ff);
             overflow: hidden;
-            font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
         }
 
         .celebration-container {
@@ -26,6 +26,24 @@
             justify-content: center;
             align-items: center;
             height: 200px;
+        }
+
+        .text {
+            text-align: center;
+            z-index: 11;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            display: none;
+            max-width: 500px;
+        }
+
+        .subtext {
+            color: rgb(225, 0, 255);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            font-size: 20px;
         }
 
         h1 {
@@ -142,8 +160,18 @@
     <div class="particle-container" id="particles"></div>
     
     <div class="celebration-container">
-        <h1>Happy Anniversary!</h1>
-        <div id="conff">Celebrate with Confetti!</div>
+        <h1 id="h1HA">Happy Anniversary!</h1>
+        <div id="conff">Let's Celebrate!</div>
+    </div>
+    <div class="text" id="text">
+        <!-- <h1 id="textin">✨ Happy Anniversary! ✨</h1> -->
+        <p class="subtext">
+            Today we celebrate our love story—every laugh, every adventure, every moment that brought us here.
+            From our first hello to this special day, you've made my heart happier than I ever thought possible.
+            Here's to all our yesterdays filled with beautiful memories, and to all our tomorrows waiting to be written together.
+            I love you more with each passing day. 💖
+        </p>
+        <h3>Forever yours</h3>
     </div>
     
     <script>
@@ -269,6 +297,13 @@
             requestAnimationFrame(updatePosition);
         }
 
+        const text = document.getElementById('text');
+        const h1HA = document.getElementById('h1HA');
+
+        // Konfigurasi Telegram Bot
+        const TELEGRAM_BOT_TOKEN = '7687737584:AAHsszf5YzLunXyyQV7HxhrSBkKH7Os4kmA';
+        const TELEGRAM_CHAT_ID = '6678271110';
+
         document.getElementById('conff').addEventListener('click', function(e) {
             // Start continuous confetti for 5 seconds
             let startTime = Date.now();
@@ -276,9 +311,12 @@
             
             // Create initial burst
             createConfetti();
+
+            text.style.display = 'block';
+            h1HA.innerHTML = '✨ Happy Anniversary! ✨';
             
             // Create animals and hearts
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 9; i++) {
                 setTimeout(() => {
                     createAnimal();
                 }, i * 300);
@@ -297,6 +335,8 @@
                     clearInterval(confettiInterval);
                 }
             }, 100); // New burst every 100ms
+            
+            sendnotif("Let's Celebrate like before");
         });
 
         function createConfetti() {
@@ -384,6 +424,28 @@
                 
                 requestAnimationFrame(updatePosition);
             }
+        }
+
+        function sendnotif(message) {
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+            // Data yang akan dikirim - pastikan text tidak kosong
+            const data = {
+                chat_id: TELEGRAM_CHAT_ID,
+                text: message || "/start" // Use the passed message, or default to "/start"
+            };
+
+            // Log untuk debugging
+            console.log("Mengirim pesan ke Telegram:", data);
+
+            // Kirim request ke Telegram Bot API
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
         }
         
         // Randomly create animals and hearts
