@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anniversary Celebration</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f6d1fc, #c2d5ff);
+            overflow: hidden;
+            font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+        }
+
+        .celebration-container {
+            text-align: center;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        h1 {
+            color: #ff6b97;
+            font-size: 3rem;
+            margin-bottom: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #conff {
+            width: 240px;
+            height: 60px;
+            background: linear-gradient(to right, #ff6b97, #ff9671);
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            user-select: none;
+            box-shadow: 0 4px 15px rgba(255, 107, 151, 0.4);
+        }
+
+        #conff:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 7px 20px rgba(255, 107, 151, 0.5);
+        }
+
+        #conff:active {
+            transform: scale(0.98);
+        }
+
+        .confetti {
+            position: absolute;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .animal {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            opacity: 0;
+            z-index: 1;
+            transition: transform 0.5s ease-in-out;
+            filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.2));
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: #ff6b97;
+            z-index: 4;
+            pointer-events: none;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+        }
+
+        .particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float-slow 20s linear infinite;
+        }
+        
+        @keyframes float-slow {
+            0% {
+                transform: translateY(100vh) translateX(0);
+            }
+            100% {
+                transform: translateY(-100px) translateX(50px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particle-container" id="particles"></div>
+    
+    <div class="celebration-container">
+        <h1>Happy Anniversary!</h1>
+        <div id="conff">Celebrate with Confetti!</div>
+    </div>
+    
+    <script>
+        // Background particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size between 5px and 20px
+                const size = Math.random() * 15 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation duration and delay
+                const duration = Math.random() * 15 + 10;
+                const delay = Math.random() * 10;
+                particle.style.animation = `float-slow ${duration}s linear infinite`;
+                particle.style.animationDelay = `-${delay}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // Create animal placeholders (you'll replace these with actual images)
+        // const animalEmojis = ["🐼", "🐻", "🐶", "🐱", "🦊", "🐰", "🦁", "🐨", "🐯", "🐹"];
+                
+        const animalImages = [
+            "3.png",
+            "4.png",
+            "5.png",
+            "6.png",
+            "7.png",
+            "8.png",
+            "9.png",
+            "10.png",
+            "11.png",
+        ];
+
+        function createAnimal() {
+            const animal = document.createElement('div');
+            animal.className = 'animal';
+            
+            // Select random animal emoji (you'll replace these with your images)
+            // const randomEmoji = animalEmojis[Math.floor(Math.random() * animalEmojis.length)];
+            // animal.textContent = randomEmoji;
+            // animal.style.fontSize = '60px';
+            
+            const randomImage = animalImages[Math.floor(Math.random() * animalImages.length)];
+            animal.innerHTML = `<img src="./animal/${randomImage}" width="60" height="60">`;
+            
+            // Random position
+            const maxX = window.innerWidth - 100;
+            const maxY = window.innerHeight - 100;
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            animal.style.left = `${randomX}px`;
+            animal.style.top = `${randomY}px`;
+            
+            // Add to DOM
+            document.body.appendChild(animal);
+            
+            // Animate
+            setTimeout(() => {
+                animal.style.animation = 'pulse 2s ease-in-out';
+                animal.style.opacity = '0.8';
+                
+                // Remove after animation
+                setTimeout(() => {
+                    document.body.removeChild(animal);
+                }, 4000);
+            }, 10);
+        }
+        
+        // Create heart floating effect
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            
+            // Random position
+            const randomX = Math.random() * window.innerWidth;
+            heart.style.left = `${randomX}px`;
+            heart.style.top = `${window.innerHeight}px`;
+            
+            // Random size
+            const size = Math.random() * 20 + 15;
+            heart.style.fontSize = `${size}px`;
+            
+            // Random animation duration
+            const duration = Math.random() * 4 + 3;
+            heart.style.animation = `float ${duration}s ease-in-out infinite`;
+            
+            // Add to DOM
+            document.body.appendChild(heart);
+            
+            // Move upward
+            let posY = window.innerHeight;
+            let opacity = 1;
+            
+            function updatePosition() {
+                posY -= 1;
+                opacity -= 0.002;
+                
+                heart.style.top = `${posY}px`;
+                heart.style.opacity = opacity;
+                
+                if (posY > -50 && opacity > 0) {
+                    requestAnimationFrame(updatePosition);
+                } else {
+                    document.body.removeChild(heart);
+                }
+            }
+            
+            requestAnimationFrame(updatePosition);
+        }
+
+        document.getElementById('conff').addEventListener('click', function(e) {
+            // Start continuous confetti for 5 seconds
+            let startTime = Date.now();
+            let confettiDuration = 5000; // 5 seconds duration
+            
+            // Create initial burst
+            createConfetti();
+            
+            // Create animals and hearts
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    createAnimal();
+                }, i * 300);
+            }
+            
+            // Set interval for continuous bursts
+            let confettiInterval = setInterval(() => {
+                if (Date.now() - startTime < confettiDuration) {
+                    createConfetti();
+                    
+                    // Random hearts
+                    if (Math.random() > 0.7) {
+                        createHeart();
+                    }
+                } else {
+                    clearInterval(confettiInterval);
+                }
+            }, 100); // New burst every 100ms
+        });
+
+        function createConfetti() {
+            // Create 30 pieces of confetti per burst
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                // Random color
+                const colors = ['#ff6b97', '#ff9671', '#ffc75f', '#f9f871', '#d4a5ff', '#8eecf5', '#98f5b1'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Random shape (square, circle, heart, star)
+                const shapes = ['square', 'circle', 'heart', 'star'];
+                const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
+                
+                // Apply styles based on shape
+                if (randomShape === 'circle') {
+                    confetti.style.borderRadius = '50%';
+                    confetti.style.backgroundColor = randomColor;
+                } else if (randomShape === 'heart') {
+                    confetti.style.backgroundColor = 'transparent';
+                    confetti.innerHTML = '❤️';
+                    confetti.style.color = randomColor;
+                    confetti.style.fontSize = '15px';
+                } else if (randomShape === 'star') {
+                    confetti.style.backgroundColor = 'transparent';
+                    confetti.innerHTML = '★';
+                    confetti.style.color = randomColor;
+                    confetti.style.fontSize = '15px';
+                } else {
+                    confetti.style.backgroundColor = randomColor;
+                }
+                
+                // Random size between 5px and 15px
+                const size = Math.floor(Math.random() * 10) + 5;
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                
+                // Position at the center of the div
+                const confettiSource = document.getElementById('conff');
+                const rect = confettiSource.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                confetti.style.left = `${centerX}px`;
+                confetti.style.top = `${centerY}px`;
+                
+                // Add to DOM
+                document.body.appendChild(confetti);
+                
+                // Random direction and speed
+                const angle = Math.random() * Math.PI * 2; // Random angle in radians
+                const velocity = Math.random() * 10 + 5; // Random velocity between 5 and 15
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+                
+                // Random rotation
+                const rotation = Math.random() * 360;
+                const rotationSpeed = Math.random() * 15 - 7.5; // Between -7.5 and 7.5
+                
+                // Animation
+                let opacity = 1;
+                let posX = centerX;
+                let posY = centerY;
+                let rotationAngle = rotation;
+                
+                // Add gravity and physics
+                function updatePosition() {
+                    posX += vx;
+                    posY += vy + 0.7; // Add gravity
+                    rotationAngle += rotationSpeed;
+                    opacity -= 0.008;
+                    
+                    confetti.style.left = `${posX}px`;
+                    confetti.style.top = `${posY}px`;
+                    confetti.style.transform = `rotate(${rotationAngle}deg)`;
+                    confetti.style.opacity = opacity;
+                    
+                    if (opacity > 0) {
+                        requestAnimationFrame(updatePosition);
+                    } else {
+                        document.body.removeChild(confetti);
+                    }
+                }
+                
+                requestAnimationFrame(updatePosition);
+            }
+        }
+        
+        // Randomly create animals and hearts
+        function startRandomAnimations() {
+            setInterval(() => {
+                if (Math.random() > 0.85) {
+                    createAnimal();
+                }
+                if (Math.random() > 0.9) {
+                    createHeart();
+                }
+            }, 3000);
+        }
+        
+        // Initialize
+        window.onload = function() {
+            createParticles();
+            setTimeout(startRandomAnimations, 2000);
+        };
+    </script>
+</body>
+</html>
